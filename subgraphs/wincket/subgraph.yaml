@@ -1,0 +1,36 @@
+specVersion: 0.0.2
+description: Wincket
+repository: https://github.com/wincket
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Wincket
+    network: bsc
+    source:
+      address: '0xB15DD753c3b18cA1074B1b5f8884DC9f7A2949c3'
+      abi: Wincket
+      startBlock: 19522026
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./mappings/index.ts
+      entities:
+        - Lottery
+        - User
+        - Round
+      abis:
+        - name: Wincket
+          file: ./abis/Wincket.json
+      eventHandlers:
+        - event: LotteryOpen(indexed uint256,uint256,uint256,uint256,uint256,uint256)
+          handler: handleLotteryOpen
+        - event: LotteryClose(indexed uint256,uint256)
+          handler: handleLotteryClose
+        - event: LotteryNumberDrawn(indexed uint256,uint256,uint256)
+          handler: handleLotteryNumberDrawn
+        - event: TicketsPurchase(indexed address,indexed uint256,uint256)
+          handler: handleTicketsPurchase
+        - event: TicketsClaim(indexed address,uint256,indexed uint256,uint256)
+          handler: handleTicketsClaim
